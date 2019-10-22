@@ -12,11 +12,24 @@ fi
 build=$1
 platform=$2
 openssl_platform=$3
-options="$4 -D_FORTIFY_SOURCE=0 -D__USE_FORTIFY_LEVEL=0"
+
+if [ ${platform} != "solaris-x86-32bit" ]; then
+  if [[ $platform == *linux* ]]; then
+    use_gnu="-D_GNU_SOURCE -D__USE_GNU"
+  else
+    use_gnu=" "
+  fi
+else
+  use_gnu=" "
+fi
+
+options="$4 -D_FORTIFY_SOURCE=0 -D__USE_FORTIFY_LEVEL=0 $use_gnu"
 
 if [ ${platform} = "macos-x86-64bit" ]; then
   export LIBRARY_PATH=/usr/lib_compile/gcc/i686-apple-darwin8/4.0.1/x86_64:/usr/lib_compile/gcc/i686-apple-darwin8/4.0.1:/usr/lib_compile
 fi
+
+export PATH=/usr/local/perl-5.10/bin:$PATH
 
 
 # Initialize
@@ -26,6 +39,7 @@ cd ~
 rm -fr ~/build-$platform/
 mkdir -p ~/build-$platform/
 cp /crossnfs/$build/src/*.tar.gz ~/build-$platform/
+cp /crossnfs/$build/src/*.zip ~/build-$platform/
 
 cd ~/build-$platform/
 
@@ -45,14 +59,12 @@ mv `find . -maxdepth 1 -type d -name libpcap\*` libpcap
 
 mkdir -p /crossnfs/$build/output/$platform/
 
-
-
 # OpenSSL
 echo --- OpenSSL - $build - $platform ---
 
 cd ~/build-$platform/openssl/
 
-./Configure -D__NO_CTYPE threads no-hw no-shared no-dso enable-weak-ssl-ciphers enable-ssl3 enable-ssl3-method no-async $openssl_platform
+./Configure -D__NO_CTYPE $use_gnu threads no-hw no-engine no-shared no-dso enable-weak-ssl-ciphers enable-ssl3 enable-ssl3-method no-async $openssl_platform
 
 perl -i.bak -p -e "s/-O3/-O2 $options/g" Makefile
 perl -i.bak -p -e "s/INT_MAX/2147483647/g" ssl/s3_pkt.c
@@ -65,12 +77,24 @@ if [ ${platform} = "linux-mipsel-32bit" ]; then
   perl -i.bak -p -e "s/    int a0, a1, a2, a3;/    int a0, a1, a2, a3; return 0;/g" crypto/x509v3/v3_utl.c
 fi
 
+cat <<\EOF > crypto/include/internal/dso_conf.h
+#ifndef HEADER_DSO_CONF_H
+# define HEADER_DSO_CONF_H
+# define DSO_NONE
+#endif
+EOF
+
+cp crypto/include/internal/dso_conf.h crypto/include/internal/dso_conf.h.in
+
 rm -f libcrypto.a libssl.a
 
 make || true
 
 cp libcrypto.a /crossnfs/$build/output/$platform/
 cp libssl.a /crossnfs/$build/output/$platform/
+
+#echo OpenSSL TMP OK!
+#exit 0
 
 # zlib
 echo --- zlib - $build - $platform ---
