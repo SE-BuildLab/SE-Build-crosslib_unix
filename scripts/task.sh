@@ -32,6 +32,12 @@ fi
 export PATH=/usr/local/perl-5.10/bin:$PATH
 
 
+# SKIP begin !!
+if false; then
+## SKIP to HERE!!
+fi
+
+
 # Initialize
 echo --- Initialize - $build - $platform ---
 
@@ -123,10 +129,13 @@ if [ ${platform} = "macos-x86-64bit" ]; then
   perl -i.bak -p -e "s/cross_compiling=no/cross_compiling=yes/g" ./libcharset/configure
   perl -i.bak -p -e "s/cross_compiling=no/cross_compiling=yes/g" ./preload/configure
   ./configure --enable-static=yes --enable-shared=no --build=i686-apple-darwin8 --host=x86_64-apple-darwin8 CC="/usr/bin/gcc -m64"
+elif [ ${platform} = "linux-arm64-64bit" ]; then
+  ./configure --enable-static=yes --enable-shared=no --build=aarch64-unknown-linux-gnu --host=aarch64-unknown-linux-gnu
 else
   ./configure --enable-static=yes --enable-shared=no
 fi
 
+cd ~/build-$platform/libiconv/
 
 perl -i.bak -p -e "s/CFLAGS = -g -O2/CFLAGS = -O2 $options/g" lib/Makefile
 perl -i.bak -p -e "s/CFLAGS = -g -O2/CFLAGS = -O2 $options/g" libcharset/lib/Makefile
@@ -148,6 +157,8 @@ cd ~/build-$platform/ncurses/
 if [ ${platform} = "macos-x86-64bit" ]; then
   perl -i.bak -p -e "s/cross_compiling=no/cross_compiling=yes/g" ./configure
   ./configure --enable-static=yes --enable-shared=no --without-gpm --build=i686-apple-darwin8 --host=x86_64-apple-darwin8 CC="/usr/bin/gcc -m64"
+elif [ ${platform} = "linux-arm64-64bit" ]; then
+  ./configure --enable-static=yes --enable-shared=no --without-gpm --build=aarch64-unknown-linux-gnu --host=aarch64-unknown-linux-gnu
 else
   ./configure --enable-static=yes --enable-shared=no --without-gpm
 fi
@@ -216,6 +227,8 @@ elif [ ${platform} = "linux-sh4-32bit" ]; then
   chmod 777 ./configure
   perl -i.bak -p -e "s/-lncurses/-lncurses2/g" ./configure
   ./configure --enable-static=yes --enable-shared=no CC="/usr/bin/gcc -L/home/cross/tmp-build-lib"
+elif [ ${platform} = "linux-arm64-64bit" ]; then
+  ./configure --enable-static=yes --enable-shared=no --build=aarch64-unknown-linux-gnu --host=aarch64-unknown-linux-gnu
 else
   ./configure --enable-static=yes --enable-shared=no
 fi
