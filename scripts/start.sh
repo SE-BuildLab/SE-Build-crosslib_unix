@@ -101,3 +101,8 @@ screen -X -S builder -p 14 stuff "ssh cross-macos-x64\n"
 screen -X -S builder -p 14 stuff "hostname\n"
 screen -X -S builder -p 14 stuff "/crossnfs/SE-Build-crosslib_unix/scripts/task.sh SE-Build-crosslib_unix macos-x86-32bit \"darwin-i386-cc no-asm\" \"-fPIE -m32\" && /crossnfs/SE-Build-crosslib_unix/scripts/task.sh SE-Build-crosslib_unix macos-x86-64bit \"darwin64-x86_64-cc no-asm\" \"-fPIE -m64\"\n"
 
+screen -X -S builder screen -t linux-arm64 15
+screen -X -S builder -p 15 stuff "bash\n"
+screen -X -S builder -p 15 stuff "ssh cross-linux-arm64\n"
+screen -X -S builder -p 15 stuff "hostname\n"
+screen -X -S builder -p 15 stuff "/crossnfs/SE-Build-crosslib_unix/scripts/task.sh SE-Build-crosslib_unix linux-arm64-64bit linux-aarch64 \"-fPIE -fno-builtin-ffs\"\n"
