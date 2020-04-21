@@ -73,7 +73,7 @@ cd ~/build-$platform/openssl/
 ./Configure -D__NO_CTYPE $use_gnu threads no-hw no-engine no-shared no-dso enable-weak-ssl-ciphers enable-ssl3 enable-ssl3-method no-async $openssl_platform
 
 perl -i.bak -p -e "s/-O3/-O2 $options/g" Makefile
-perl -i.bak -p -e "s/INT_MAX/2147483647/g" ssl/s3_pkt.c
+perl -i.bak -p -e "s/INT_MAX/2147483647/g" ssl/s3_pkt.c || true
 
 if [ ${platform} = "linux-ppc-32bit" ]; then
   perl -i.bak -p -e "s/    int a0, a1, a2, a3;/    int a0, a1, a2, a3; return 0;/g" crypto/x509v3/v3_utl.c
