@@ -90,7 +90,7 @@ cat <<\EOF > include/crypto/dso_conf.h
 #endif
 EOF
 
-cp include/crypto/dso_conf.h include/crypto/dso_conf.h
+cp include/crypto/dso_conf.h include/crypto/dso_conf.h.in
 
 rm -f libcrypto.a libssl.a
 
