@@ -83,14 +83,14 @@ if [ ${platform} = "linux-mipsel-32bit" ]; then
   perl -i.bak -p -e "s/    int a0, a1, a2, a3;/    int a0, a1, a2, a3; return 0;/g" crypto/x509v3/v3_utl.c
 fi
 
-cat <<\EOF > crypto/include/internal/dso_conf.h
+cat <<\EOF > include/crypto/dso_conf.h
 #ifndef HEADER_DSO_CONF_H
 # define HEADER_DSO_CONF_H
 # define DSO_NONE
 #endif
 EOF
 
-cp crypto/include/internal/dso_conf.h crypto/include/internal/dso_conf.h.in
+cp include/crypto/dso_conf.h include/crypto/dso_conf.h
 
 rm -f libcrypto.a libssl.a
 
