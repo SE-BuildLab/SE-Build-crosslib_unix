@@ -33,9 +33,9 @@ export PATH=/usr/local/perl-5.10/bin:$PATH
 
 
 # SKIP begin !!
-if false; then
+#if false; then
 ## SKIP to HERE!!
-fi
+#fi
 
 
 # Initialize
