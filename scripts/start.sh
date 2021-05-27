@@ -45,11 +45,11 @@ screen -X -S builder -p 6 stuff "ssh cross-linux-ppc32\n"
 screen -X -S builder -p 6 stuff "hostname\n"
 screen -X -S builder -p 6 stuff "/crossnfs/SE-Build-crosslib_unix/scripts/task.sh SE-Build-crosslib_unix linux-ppc-32bit linux-generic32 \"-fPIE\"\n"
 
-screen -X -S builder screen -t linux-sh32 7
-screen -X -S builder -p 7 stuff "bash\n"
-screen -X -S builder -p 7 stuff "ssh cross-linux-sh32\n"
-screen -X -S builder -p 7 stuff "hostname\n"
-screen -X -S builder -p 7 stuff "/crossnfs/SE-Build-crosslib_unix/scripts/task.sh SE-Build-crosslib_unix linux-sh4-32bit linux-generic32 \"-fPIE\"\n"
+#screen -X -S builder screen -t linux-sh32 7
+#screen -X -S builder -p 7 stuff "bash\n"
+#screen -X -S builder -p 7 stuff "ssh cross-linux-sh32\n"
+#screen -X -S builder -p 7 stuff "hostname\n"
+#screen -X -S builder -p 7 stuff "/crossnfs/SE-Build-crosslib_unix/scripts/task.sh SE-Build-crosslib_unix linux-sh4-32bit linux-generic32 \"-fPIE\"\n"
 
 screen -X -S builder screen -t freebsd-x86 8
 screen -X -S builder -p 8 stuff "bash\n"
