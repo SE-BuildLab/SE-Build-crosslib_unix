@@ -70,7 +70,7 @@ echo --- OpenSSL - $build - $platform ---
 
 cd ~/build-$platform/openssl/
 
-./Configure -D__NO_CTYPE $use_gnu threads no-hw no-engine no-shared no-dso enable-weak-ssl-ciphers enable-ssl3 enable-ssl3-method no-async $openssl_platform
+./Configure -D__NO_CTYPE -DOPENSSL_NO_APPLE_CRYPTO_RANDOM $use_gnu -static threads no-hw no-engine no-shared no-dso enable-weak-ssl-ciphers enable-ssl3 enable-ssl3-method no-async  no-tests $openssl_platform
 
 perl -i.bak -p -e "s/-O3/-O2 $options/g" Makefile
 perl -i.bak -p -e "s/INT_MAX/2147483647/g" ssl/s3_pkt.c || true
@@ -83,10 +83,19 @@ if [ ${platform} = "linux-mipsel-32bit" ]; then
   perl -i.bak -p -e "s/    int a0, a1, a2, a3;/    int a0, a1, a2, a3; return 0;/g" crypto/x509v3/v3_utl.c
 fi
 
+if [[ $platform == *solaris* ]]; then
+  perl -i.bak -p -e "s/defined\(__sun\)/defined\(__DUMMY__sun\)/g" crypto/threads_pthread.c
+fi
+
+if [[ $platform == *arm-32bit* ]]; then
+  perl -i.bak -p -e "s/error \"unsupported ARM architecture\"/define __ARM_ARCH__ 4/g" crypto/arm_arch.h
+fi
+
 cat <<\EOF > include/crypto/dso_conf.h
 #ifndef HEADER_DSO_CONF_H
 # define HEADER_DSO_CONF_H
 # define DSO_NONE
+# define DSO_EXTENSION ".dll"
 #endif
 EOF
 

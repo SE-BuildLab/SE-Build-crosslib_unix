@@ -25,7 +25,7 @@ screen -X -S builder screen -t linux-arm32 3
 screen -X -S builder -p 3 stuff "bash\n"
 screen -X -S builder -p 3 stuff "ssh cross-linux-arm32\n"
 screen -X -S builder -p 3 stuff "hostname\n"
-screen -X -S builder -p 3 stuff "/crossnfs/SE-Build-crosslib_unix/scripts/task.sh SE-Build-crosslib_unix linux-arm-32bit linux-generic32 \"-fPIE -fno-builtin-ffs\"\n"
+screen -X -S builder -p 3 stuff "/crossnfs/SE-Build-crosslib_unix/scripts/task.sh SE-Build-crosslib_unix linux-arm-32bit \"linux-generic32 no-asm\" \"-fPIE -fno-builtin-ffs\"\n"
 
 screen -X -S builder screen -t linux-armeabi32 4
 screen -X -S builder -p 4 stuff "bash\n"
