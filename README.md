@@ -1,5 +1,5 @@
-crosslib_unix, 210908_02 
-- openssl-3.0.0
+crosslib_unix, 223023_01 
+- openssl-3.0.2
 - zlib-1.2.11
 - libiconv-1.13
 - libedit-20090111-3.0
