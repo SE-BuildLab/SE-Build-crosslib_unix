@@ -81,15 +81,10 @@ perl -i.bak -p -e "s/INT_MAX/2147483647/g" ssl/s3_pkt.c || true
 
 
 # avoid to use __floatundidf
-perl -i.bak -p -e "s/\*val \= \(double\)u64\;/\*val \= \(double\)\(\(signed long long\)u64\)\;/g" crypto/params.c
+# http://lts.dn.ipantt.net/d/220401_002_75545/
 
-perl -i.bak -p -e "s/\*\(uint64_t \*\)p\-\>data \= \(uint64_t\)val\;/\*\(uint64_t \*\)p\-\>data \= \(uint64_t\)\(\(signed long long\)val\)\;/g" crypto/params.c
+cp /crossnfs/$build/patch/params.c crypto/params.c
 
-perl -i.bak -p -e "s/\*\(double \*\)p\-\>data \= \(double\)val\;/\*\(double \*\)p\-\>data \= \(double\)\(\(signed long long\)val\)\;/g" crypto/params.c
-
-perl -i.bak -p -e "s/\&\& d \=\= \(uint64_t\)d\) \{/\&\& d \=\= \(uint64_t\)\(\(signed long long\)d\)\) \{/g" crypto/params.c
-
-perl -i.bak -p -e "s/\*val \= \(uint64_t\)d\;/\*val \= \(uint64_t\)\(\(signed long long\)d\)\;/g" crypto/params.c
 
 
 if [ ${platform} = "linux-ppc-32bit" ]; then
