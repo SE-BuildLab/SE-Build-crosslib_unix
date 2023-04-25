@@ -74,10 +74,14 @@ cd ~/build-$platform/openssl/
 # force enable threads
 perl -i.bak -p -e "s/unless\(\\\$disabled\{threads\}\) \{/if \(1\) \{/g" ./Configure
 
-./Configure -D__NO_CTYPE -DOPENSSL_NO_APPLE_CRYPTO_RANDOM $use_gnu -static threads no-hw no-engine no-shared no-dso enable-weak-ssl-ciphers enable-ssl3 enable-ssl3-method no-async  no-tests $openssl_platform
+./Configure -D__NO_CTYPE -DOPENSSL_NO_APPLE_CRYPTO_RANDOM -DBROKEN_CLANG_ATOMICS $use_gnu -static threads no-hw no-engine no-shared no-dso enable-weak-ssl-ciphers enable-ssl3 enable-ssl3-method no-async  no-tests $openssl_platform
 
 perl -i.bak -p -e "s/-O3/-O2 $options/g" Makefile
 perl -i.bak -p -e "s/INT_MAX/2147483647/g" ssl/s3_pkt.c || true
+
+# avoid to use pthread_rwlock_wrlock and atomics for pthread: they are buggy!!
+perl -i.bak -p -e "s/PTHREAD_RWLOCK_INITIALIZER/__PTHREAD_RWLOCK_INITIALIZER_DISABLED__/g" crypto/threads_pthread.c
+
 
 
 # avoid to use __floatundidf
