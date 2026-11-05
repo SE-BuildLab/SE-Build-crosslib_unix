@@ -254,6 +254,8 @@ elif [ ${platform} = "linux-sh4-32bit" ]; then
   ./configure --enable-static=yes --enable-shared=no CC="/usr/bin/gcc -L/home/cross/tmp-build-lib"
 elif [ ${platform} = "linux-arm64-64bit" ]; then
   ./configure --enable-static=yes --enable-shared=no --build=aarch64-unknown-linux-gnu --host=aarch64-unknown-linux-gnu
+elif [ ${platform} = "solaris-x64-64bit" ]; then
+  ./configure CC="gcc -m64" CFLAGS="-O2 -fPIC -m64" LDFLAGS="-m64" --enable-static=yes --enable-shared=no
 else
   ./configure --enable-static=yes --enable-shared=no
 fi
